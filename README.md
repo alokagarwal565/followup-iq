@@ -8,9 +8,9 @@ Built for the Gushwork Forward Deployed Engineer take-home. The requirements, as
 
 | Deliverable | Where |
 |---|---|
-| Live app | *Added after deployment* (see [deployment runbook](docs/deployment.md)) |
+| Live app | [https://followup-iq.vercel.app/](https://followup-iq.vercel.app/) |
 | Code | This repository |
-| Video (≤ 3 min) | Script: [docs/demo-script.md](docs/demo-script.md) |
+| Video | [https://www.loom.com/share/bbb4e38a8f4249e486b91144e5b1af7f](https://www.loom.com/share/bbb4e38a8f4249e486b91144e5b1af7f) |
 | Short note | [docs/technical-note.md](docs/technical-note.md) |
 
 > **Demo only:** all data is fictional. There is no login, by design of the assignment, so please don't enter real customer information.
