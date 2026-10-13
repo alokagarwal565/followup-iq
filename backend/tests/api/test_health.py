@@ -16,6 +16,11 @@ def test_health_responds_without_database():
     assert response.json() == {"status": "ok"}
 
 
+def test_health_supports_head_method():
+    response = client().head("/health")
+    assert response.status_code == 200
+
+
 def test_unknown_route_uses_error_envelope_with_request_id():
     response = client().get("/api/v1/nope")
     assert response.status_code == 404
