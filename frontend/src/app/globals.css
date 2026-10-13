@@ -1,0 +1,200 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dark follows the system setting only; an in-app appearance switch is deliberately absent. */
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+/*
+ * "Tall" = room for the pinned workspace (header and reason stay put, only the thread scrolls).
+ * Shorter or narrower windows scroll the whole workspace instead, so the draft is never squeezed out.
+ */
+@custom-variant tall (@media (min-width: 64rem) and (min-height: 50rem));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Product semantics: each colour has exactly one meaning across the app. */
+  --color-overdue: var(--overdue);
+  --color-overdue-tint: var(--overdue-tint);
+  --color-selected: var(--selected);
+  --color-hot-foreground: var(--hot-foreground);
+  --color-hot-tint: var(--hot-tint);
+  --color-warm-foreground: var(--warm-foreground);
+  --color-warm-tint: var(--warm-tint);
+  --color-cold-foreground: var(--cold-foreground);
+  --color-cold-tint: var(--cold-tint);
+  --color-success: var(--success);
+  --color-input-border: var(--input-border);
+  --color-draft: var(--draft);
+  --color-draft-border: var(--draft-border);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+/*
+ * Every pairing below is verified for both appearances by scripts/check-contrast.mjs.
+ * The accent is a deep WhatsApp-era teal: the reps' real workplace is WhatsApp, so the one accent
+ * points at "send the next message". It marks the primary action, the selection and "due today",
+ * and stays clearly apart from the Cold tag's blue.
+ */
+:root {
+  color-scheme: light dark;
+
+  --background: oklch(0.982 0.004 200);
+  --foreground: oklch(0.22 0.02 210);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.02 210);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.02 210);
+
+  --primary: oklch(0.47 0.085 192);
+  --primary-foreground: oklch(0.99 0.004 190);
+  --secondary: oklch(0.955 0.008 200);
+  --secondary-foreground: oklch(0.22 0.02 210);
+  --muted: oklch(0.962 0.006 200);
+  --muted-foreground: oklch(0.47 0.02 215);
+  --accent: oklch(0.952 0.012 195);
+  --accent-foreground: oklch(0.22 0.02 210);
+  --destructive: oklch(0.52 0.19 27);
+
+  --border: oklch(0.905 0.01 200);
+  /* Form controls need a 3:1 boundary (WCAG 1.4.11); hairline --border is too faint for that. */
+  --input: oklch(0.64 0.02 210);
+  --input-border: oklch(0.64 0.02 210);
+  --ring: oklch(0.5 0.09 192);
+
+  --overdue: oklch(0.5 0.19 27);
+  --overdue-tint: oklch(0.955 0.03 27);
+  --selected: oklch(0.945 0.03 192);
+  --hot-foreground: oklch(0.47 0.16 35);
+  --hot-tint: oklch(0.955 0.03 40);
+  --warm-foreground: oklch(0.45 0.1 70);
+  --warm-tint: oklch(0.96 0.04 85);
+  --cold-foreground: oklch(0.45 0.09 245);
+  --cold-tint: oklch(0.955 0.025 245);
+  --success: oklch(0.48 0.12 150);
+
+  /* The unsent draft bubble: a pale accent wash with a dashed outline, distinct from sent mail. */
+  --draft: oklch(0.975 0.015 192);
+  --draft-border: oklch(0.6 0.07 192);
+
+  --radius: 0.625rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.17 0.012 220);
+    --foreground: oklch(0.95 0.006 220);
+    --card: oklch(0.21 0.013 220);
+    --card-foreground: oklch(0.95 0.006 220);
+    --popover: oklch(0.23 0.013 220);
+    --popover-foreground: oklch(0.95 0.006 220);
+
+    --primary: oklch(0.76 0.1 186);
+    --primary-foreground: oklch(0.18 0.02 200);
+    --secondary: oklch(0.26 0.012 220);
+    --secondary-foreground: oklch(0.95 0.006 220);
+    --muted: oklch(0.25 0.012 220);
+    --muted-foreground: oklch(0.75 0.014 220);
+    --accent: oklch(0.27 0.014 210);
+    --accent-foreground: oklch(0.95 0.006 220);
+    --destructive: oklch(0.74 0.16 25);
+
+    --border: oklch(0.31 0.012 220);
+    --input: oklch(0.56 0.015 220);
+    --input-border: oklch(0.56 0.015 220);
+    --ring: oklch(0.76 0.1 186);
+
+    --overdue: oklch(0.76 0.15 25);
+    --overdue-tint: oklch(0.28 0.06 25);
+    --selected: oklch(0.29 0.04 192);
+    --hot-foreground: oklch(0.82 0.12 45);
+    --hot-tint: oklch(0.29 0.06 40);
+    --warm-foreground: oklch(0.85 0.11 85);
+    --warm-tint: oklch(0.29 0.05 80);
+    --cold-foreground: oklch(0.82 0.08 245);
+    --cold-tint: oklch(0.28 0.045 245);
+    --success: oklch(0.79 0.14 150);
+
+    --draft: oklch(0.24 0.03 192);
+    --draft-border: oklch(0.62 0.08 188);
+  }
+}
+
+/* Increase Contrast: stronger secondary text and boundaries, same hues. */
+@media (prefers-contrast: more) {
+  :root {
+    --muted-foreground: oklch(0.36 0.02 215);
+    --border: oklch(0.7 0.015 210);
+    --input: oklch(0.45 0.02 210);
+    --input-border: oklch(0.45 0.02 210);
+    --draft-border: oklch(0.42 0.08 192);
+  }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root {
+    --muted-foreground: oklch(0.86 0.01 220);
+    --border: oklch(0.55 0.015 220);
+    --input: oklch(0.72 0.015 220);
+    --input-border: oklch(0.72 0.015 220);
+    --draft-border: oklch(0.8 0.08 188);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Touch screens get the 44 px default target; pointer-driven desktops keep the compact sizes. */
+@media (pointer: coarse) {
+  [data-slot="button"],
+  [data-slot="select-trigger"],
+  [data-slot="dialog-close"] {
+    min-height: 2.75rem;
+  }
+  [data-slot="button"][data-size^="icon"],
+  [data-slot="dialog-close"] {
+    min-width: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

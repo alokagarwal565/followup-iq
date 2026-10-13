@@ -1,0 +1,51 @@
+# Render Blueprint for the FollowUpIQ API. Secrets are declared with `sync: false`, so Render asks
+# for their values in the dashboard; they are never stored in this file.
+services:
+  - type: web
+    name: followupiq-api
+    runtime: python
+    plan: free
+    # Closest Render region to the Supabase project (ap-southeast-2) and to users in India.
+    region: singapore
+    rootDir: backend
+    buildCommand: pip install --require-hashes -r requirements.txt
+    # Migrations are idempotent and serialised by an advisory lock, so running them on every boot
+    # is safe. The app writes its own access log without query strings, so uvicorn's is disabled.
+    startCommand: >-
+      python -m app.db.migrate &&
+      uvicorn app.main:build_app --factory --host 0.0.0.0 --port $PORT --no-access-log
+    healthCheckPath: /health
+    envVars:
+      # Full patch version required by Render; matches the version the test suite ran on.
+      - key: PYTHON_VERSION
+        value: "3.12.10"
+      - key: ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: BUSINESS_TZ
+        value: Asia/Kolkata
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: CORS_ORIGIN_REGEX
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY_2
+        sync: false
+      - key: GEMINI_API_KEY_3
+        sync: false
+      - key: GEMINI_MODEL_HEAVY
+        value: gemini-3.6-flash
+      - key: GEMINI_MODEL_FALLBACK_HEAVY
+        value: gemini-3.8-flash
+      - key: GEMINI_MODEL_FAST
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_MODEL_FALLBACK_FAST
+        value: gemini-3.1-flash-lite
+      - key: RATE_LIMIT_WRITES_PER_MIN
+        value: "60"
+      - key: RATE_LIMIT_ANALYZE_PER_MIN
+        value: "10"
