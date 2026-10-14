@@ -1,7 +1,7 @@
 from app.seed_data import SEED_LEADS
 
 
-def test_sample_data_meets_the_assignment_minimums():
+def test_sample_data_meets_minimum_requirements():
     with_chat = [lead for lead in SEED_LEADS if lead.messages]
     assert len(SEED_LEADS) >= 20
     assert len(with_chat) >= 10

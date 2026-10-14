@@ -543,7 +543,7 @@ Every card follows the same rhythm: **write tests → run and watch them fail �
 
 ### Task P0-T1 / P0-T2: planning documents
 **Files:** `docs/BRD.md`, `docs/IMPLEMENTATION_PLAN.md`
-**Verify:** self-review (spec coverage against the assignment, placeholder scan, name consistency) → **owner review and approval. STOP.**
+**Verify:** self-review (spec coverage, placeholder scan, name consistency) → **owner review and approval. STOP.**
 
 ### Task A1: ✅ Backend skeleton, configuration, environment — COMPLETE
 - **Status:** ✅ Complete (12 Oct). Python 3.12 venv; deps locked with hashes (`uv pip compile --universal`); `httpx2` added because Starlette 1.7's TestClient requires it. `backend/.env` is **not** created (the owner provides it). Evidence: `ruff format --check` 13 files clean · `ruff check` passed · `mypy` (strict) no issues in 9 files · `pytest` 13 passed, 0 warnings.
@@ -610,7 +610,7 @@ Every card follows the same rhythm: **write tests → run and watch them fail �
 **Verify:** `pytest tests/db -q` + gates.
 
 ### Task B3: ✅ Queries, seed, rebase — COMPLETE
-- **Status:** ✅ Complete (12 Oct). Typed records via psycopg `class_row`. Update allow-lists turn unknown columns into programming errors. LIKE wildcards are escaped. Messages always append to the latest conversation. Seeding is idempotent (fixed uuid5 ids, bare `ON CONFLICT DO NOTHING`). The rebase shifts only seeded rows by whole business days. A red/green catch: the rebase test's "user" lead reused a seed phone and was correctly rejected by the unique index; fixed in the test. Evidence: 11 query + 4 seed DB tests + 3 seed-data invariant tests (assignment minimums, no future messages, chronological order) · total 138 passed · ruff/mypy clean.
+- **Status:** ✅ Complete (12 Oct). Typed records via psycopg `class_row`. Update allow-lists turn unknown columns into programming errors. LIKE wildcards are escaped. Messages always append to the latest conversation. Seeding is idempotent (fixed uuid5 ids, bare `ON CONFLICT DO NOTHING`). The rebase shifts only seeded rows by whole business days. A red/green catch: the rebase test's "user" lead reused a seed phone and was correctly rejected by the unique index; fixed in the test. Evidence: 11 query + 4 seed DB tests + 3 seed-data invariant tests (dataset minimums, no future messages, chronological order) · total 138 passed · ruff/mypy clean.
 **Files:** `backend/app/db/queries/{leads.py, messages.py, drafts.py}`, `backend/app/seed_data.py`, `backend/app/cli/seed.py`, `backend/tests/db/test_seed.py`
 **Interfaces produced:**
 - `leads.list_rows(conn, filters) -> list[LeadRecord]`
@@ -798,7 +798,7 @@ The output is recorded in the tracker. If eval shows mismatches, adjust the prom
   | Client bundle secret scan (`.next/static`) | 0 hits for every configured key, `postgres://`, `neon.tech`, `supabase.co` and `AIza` |
   | Server log scan | 0 phone numbers, 0 key material. **Found:** uvicorn's access log recorded search queries (names). **Fixed:** uvicorn access log off; the app emits `event=http_request` with method, path (no query), status and duration; test added. |
   | Rate limiter | **Found:** keyed on the first `X-Forwarded-For` hop, which a client can forge to dodge the limit. **Fixed:** keys on the last hop, the one appended by the trusted proxy; regression test added. |
-  | REVIEW.md checklist | Auth/tenancy N/A by assignment (documented with compensating controls). Validation at every boundary. Typed AI schemas with bounded retries/fallbacks. Secrets server-side only. Model output is never executed. |
+  | REVIEW.md checklist | Auth/tenancy N/A for public demo (documented with compensating controls). Validation at every boundary. Typed AI schemas with bounded retries/fallbacks. Secrets server-side only. Model output is never executed. |
 - A review against `REVIEW.md` criteria (severity-ranked, at most 5 nits), the threat-model checklist, `npm audit --omit=dev`, and `pip-audit -r requirements.txt`.
 - A grep of `.next/` for `AIza|postgres(ql)?://|GEMINI`.
 - A grep of the logs from the E1 run for phone patterns.
@@ -815,13 +815,13 @@ Findings are fixed (with tests) or recorded with a justification.
 - Vercel: root `frontend`; `NEXT_PUBLIC_API_BASE_URL`; redeploy after changing it.
 - CORS update.
 - Keep-warm ping (optional).
-- `seed --rebase-demo` before submission.
+- `seed --rebase-demo` before demo recording.
 - Smoke checklist (§13).
 - Rollback.
 
-### Task G1: ✅ Submission materials — COMPLETE
-- **Status:** ✅ Complete (13 Oct). `README.md` (overview, decision rules, architecture, setup, env, test gates, security, limitations); `docs/technical-note.md` (355 words, about half a page: what was built, how Hot/Warm/Cold is decided, AI tools including Claude Code, what's next); `docs/demo-script.md` (a 2:30 click-by-click script with narration, using the verified Rahul and Vikram scenarios, plus recording prep and recovery tips); `CLAUDE.md` updated. **The video itself is recorded by the owner.**
-**Files:** `README.md`, `docs/technical-note.md` (≤ about 300 words), `docs/demo-script.md` (≤ 2:30 with click-by-click steps and narration)
+### Task G1: ✅ Documentation & demo materials — COMPLETE
+- **Status:** ✅ Complete (13 Oct). `README.md` (overview, decision rules, architecture, setup, env, test gates, security, limitations); `docs/technical-note.md` (what was built, how Hot/Warm/Cold is decided, AI tools including Claude Code, what's next); `docs/demo-script.md` (click-by-click script with narration, using the verified Rahul and Vikram scenarios, plus recording prep and recovery tips); `CLAUDE.md` updated.
+**Files:** `README.md`, `docs/technical-note.md`, `docs/demo-script.md`
 **Verify:**
 - The note's word count.
 - The script timed read-aloud at ≤ 2:30.
@@ -867,7 +867,7 @@ Status keys: ⬜ Not started · 🔄 In progress · ✅ Complete (with evidence)
 | E2 | E2E + axe | ✅ | 8 passed (2 by-design skips), 0 serious a11y |
 | E3 | Hardening review | ✅ | 2 security fixes (log PII, XFF spoofing); audits clean |
 | F1 | Deployment runbook | ✅ | render.yaml + docs/deployment.md (not deployed) |
-| G1 | Submission materials | ✅ | README, note, demo script (owner records video) |
+| G1 | Documentation & demo | ✅ | README, note, demo script |
 
 When a task completes, update all three places in the same edit: (1) the card header gets a ✅, (2) a `**Status:** ✅ Complete` bullet with evidence is added under the card, (3) this table row and the Progress counter change.
 

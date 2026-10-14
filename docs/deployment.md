@@ -79,13 +79,13 @@ then save; Render redeploys. **Check:** the Vercel site loads the queue. If the 
 8. DevTools → Network: responses contain no keys or connection strings; requests go only to the Render origin.
 9. Render → Manual Deploy → Restart → the data is unchanged.
 
-## 6. Before you submit or record the demo
+## 6. Before recording the demo or showcasing
 ```powershell
 cd backend
 $env:DATABASE_URL = "<session pooler URI>"
 .venv\Scripts\python -m app.cli.seed --rebase-demo   # shifts only demo rows so "today" looks current
 ```
-**Optional keep-warm during the review window:** free Render services sleep after 15 minutes. A free external monitor (e.g. UptimeRobot or cron-job.org) can call `GET /health` every 14 minutes. 750 free instance-hours a month covers one service running continuously. Remove the monitor afterwards.
+**Optional keep-warm during active demos:** free Render services sleep after 15 minutes. A free external monitor (e.g. UptimeRobot or cron-job.org) can call `GET /health` every 14 minutes. 750 free instance-hours a month covers one service running continuously. Remove the monitor afterwards.
 
 ## 7. Rollback
 - **Vercel:** Deployments → pick the previous deployment → **Promote to Production** (instant).

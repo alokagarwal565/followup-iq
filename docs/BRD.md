@@ -4,9 +4,9 @@
 |---|---|
 | Product | **FollowUpIQ**: AI Sales Follow-ups |
 | Tagline | Know who to follow up with. Know what to say. |
-| Status | Draft for review |
+| Status | Active |
 | Date | 12 Oct 2026 |
-| Source of truth | The Gushwork FDE take-home assignment, summarised in §1–§2 and traced in §13 |
+| Source of truth | Product specifications, summarised in §1–§2 and traced in §13 |
 | Companion | [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) covers how each requirement is built and tested |
 
 ---
@@ -25,9 +25,9 @@ The owner wants **one simple screen that tells each rep who to follow up with to
 
 ## 2. Business objectives and success measures
 
-| # | Objective | Success measure (maps to the reviewer's pass/fail checks) |
+| # | Objective | Success measure |
 |---|---|---|
-| O1 | The tool works reliably | The live link opens and the main flow runs with no errors ("It works") |
+| O1 | The tool works reliably | The live link opens and the main flow runs with no errors |
 | O2 | The agent's judgement is trustworthy | The Hot/Warm/Cold tags and reasons make sense for the chats ("Agent is useful") |
 | O3 | Reps save time writing messages | A rep could send the draft with small edits or none ("Drafts are usable") |
 | O4 | Instant prioritisation | A rep knows who to contact today **within 10 seconds** of opening the app ("Screen is clear") |
@@ -40,7 +40,7 @@ The owner wants **one simple screen that tells each rep who to follow up with to
 |---|---|---|
 | **Sales rep** (5 people, e.g. *Priya Sharma*) | Clear today's follow-ups quickly | Their own queue, most urgent first; the chat context; a ready message they can copy into WhatsApp; a record that it was sent |
 | **Owner** | Make sure no good lead goes cold | Overdue follow-ups that are impossible to miss; hot leads visible at a glance; all reps' queues in one place |
-| **Reviewer** (Gushwork) | Judge the build in minutes | A public link with no setup, realistic data, and a visible agent update after adding a chat |
+| **Evaluator / User** | Test the product in minutes | A public link with no setup, realistic data, and a visible agent update after adding a chat |
 
 ## 4. Scope
 
@@ -49,7 +49,7 @@ The owner wants **one simple screen that tells each rep who to follow up with to
 2. An agent that reads leads and chats, then tags each lead Hot, Warm or Cold with a one-line reason, sets the next follow-up date and drafts the next message.
 3. A web screen with: today's follow-ups at the top, most urgent first; overdue follow-ups that stand out; a lead detail view (chat, tag, reason, date, draft); editing the draft; marking it as sent; adding a new lead or a new chat, after which the agent updates that lead.
 
-### Out of scope (explicitly excluded by the assignment)
+### Out of scope (deferred to future phases)
 - Login, users and permissions
 - Real WhatsApp sending or a WhatsApp integration
 - Payments
@@ -59,65 +59,65 @@ Excel/CSV import, a WhatsApp chat-export parser, a manual snooze/reschedule cont
 
 ## 5. Functional requirements
 
-Each requirement traces back to the assignment. Its acceptance criteria are the tests the requirement must pass.
+Each requirement defines acceptance criteria that must pass.
 
-### FR-01: Sample leads *(Step 1)*
+### FR-01: Sample leads
 At least 20 fictional leads, each with name, company, phone, source and last contact date, spread across the 5 reps.
 - **AC1** The database holds ≥ 20 leads after seeding, and re-running the seed never duplicates them.
 - **AC2** All data is clearly fictional. Phones are in the synthetic `+91 90000 0XXXX` range, with no real people or companies.
 - **AC3** Sources vary: Excel sheet, WhatsApp, Website, Referral, Trade show, IndiaMART.
 
-### FR-02: Sample chats *(Step 1)*
+### FR-02: Sample chats
 At least 10 short WhatsApp-style chats between a rep and a buyer.
 - **AC1** ≥ 10 chats of 3–9 messages, each with a clear sender (rep or buyer) and chronological timestamps.
 - **AC2** Together the chats cover: explicit purchase intent, a quote or demo request, a defined timeline, technical evaluation, a price objection, a follow-up commitment, a delayed project, weak interest, no response after several attempts, a lost or disqualified lead, and a do-not-contact request.
 - **AC3** At least one lead has **no chat** (an Excel-only lead) and the app still works for it.
 
-### FR-03: The agent reads leads and chats *(Step 2.1)*
+### FR-03: The agent reads leads and chats
 - **AC1** Analysis uses the lead's fields and its full chat history (the most recent 40 messages if a chat is longer).
 - **AC2** The agent runs when a lead is created, when a chat is added, after a message is marked as sent, and when a rep presses **Re-analyze**. It never runs just because a page is opened.
 
-### FR-04: Hot / Warm / Cold tag with a one-line reason *(Step 2.2)*
+### FR-04: Hot / Warm / Cold tag with a one-line reason
 - **AC1** Every analyzed lead has exactly one tag (Hot, Warm or Cold) and a reason of 160 characters or fewer that cites evidence from the chat.
 - **AC2** The tag follows the business rules in section 6.1. The AI interprets the chat, and the rules decide the tag.
 - **AC3** Reasons never invent facts such as a budget, an agreed date, a requirement or a commitment.
 
-### FR-05: Next follow-up date *(Step 2.3)*
+### FR-05: Next follow-up date
 - **AC1** Every lead has a next follow-up date, except a lead whose buyer asked not to be contacted (section 6.2, rule 1).
 - **AC2** The date follows the rules in section 6.2 and is explained in a short follow-up reason.
 
-### FR-06: Draft the next follow-up message *(Step 2.4)*
+### FR-06: Draft the next follow-up message
 - **AC1** Every contactable lead has a draft WhatsApp message that follows the guidelines in section 6.4.
 - **AC2** The draft never invents prices, discounts, specifications, delivery dates or stock availability.
 
-### FR-07: Today's follow-ups at the top, most urgent first *(Step 3)*
+### FR-07: Today's follow-ups at the top, most urgent first
 - **AC1** The queue is grouped as **Overdue → Due today → Upcoming → No follow-up**, and ordered within each group by the rules in section 6.3.
 - **AC2** On a desktop screen, the first viewport shows the queue and the most urgent lead's details and draft with no scrolling.
 - **AC3** A filter bar shows counts for *Overdue*, *Due today*, *Hot* and *All active*, and each count filters the queue.
 - **AC4** A rep can switch the view to just their own leads, and the app remembers the choice.
 
-### FR-08: Overdue follow-ups stand out *(Step 3)*
+### FR-08: Overdue follow-ups stand out
 - **AC1** Overdue leads appear first, in their own group, with an alert icon, a red tint and text such as "3d overdue". Overdue is never shown by colour alone.
 - **AC2** The browser tab title shows the number of leads needing action, e.g. "(7) FollowUpIQ".
 
-### FR-09: Open a lead *(Step 3)*
+### FR-09: Open a lead
 - **AC1** The lead view shows contact details (name, company, phone, source, assigned rep), the tag, the reason with up to 3 evidence points, the next follow-up date with its reason, the full chat in order, and the draft.
 - **AC2** The view has its own URL, so refresh, back and shared links all work.
 - **AC3** It shows the analysis status: analyzed by AI, updating, rule-based (AI unavailable), or failed with a Retry button.
 
-### FR-10: Edit the draft and mark it as sent *(Step 3)*
+### FR-10: Edit the draft and mark it as sent
 - **AC1** A rep can edit the draft and save it. The edit survives a refresh, and later AI updates never overwrite it silently: a new AI suggestion is offered alongside it instead.
 - **AC2** **Mark as sent** records the message in the chat history (labelled "Marked sent via FollowUpIQ") and updates the last contact date and the next follow-up date immediately.
 - **AC3** The UI makes clear that nothing is sent to WhatsApp. A **Copy** button supports the real workflow: copy, paste into WhatsApp, then mark as sent.
 - **AC4** **Undo** is available for 10 minutes after marking as sent, as long as no newer message has been added.
 
-### FR-11: Add a new lead or a new chat; the agent updates that lead *(Step 3)*
+### FR-11: Add a new lead or a new chat; the agent updates that lead
 - **AC1** **Add lead** validates name, company, phone and source. A phone number that already exists is flagged and the rep can open the existing lead instead.
 - **AC2** **Log chat** adds one or more messages (sender, text, optional time) to a lead.
 - **AC3** After either action the lead shows "Updating…", and the tag, reason, date and draft refresh without reloading the page. If the tag changes, the change is visible (e.g. "Warm → Hot").
 - **AC4** If the AI is unavailable, the new data is still saved and a Retry option appears.
 
-### FR-12: Excluded features stay out *(Out of scope)*
+### FR-12: Excluded features stay out
 - **AC1** No login, no WhatsApp sending and no payments exist anywhere in the product.
 
 ## 6. Business rules
@@ -216,32 +216,32 @@ Any remaining tie is broken by a fixed internal id, so the order never changes b
 
 ## 10. Constraints
 
-- Delivery within the assignment window (36–48 hours).
-- No login is allowed, so the public demo is open to anyone with the link.
+- Rapid iteration and delivery.
+- Public demo with open access and fictional data.
 - Free-tier limits: server sleep on Render, AI quotas per Google Cloud project, a small database connection budget.
 
 ## 11. Risks and mitigations
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| The AI tags a lead wrongly | Trust lost ("Agent is useful" fails) | Rules decide the tag from extracted signals; every tag stores the rule that fired; an evaluation run over the sample chats compares expected and actual tags before submission |
-| AI quota exhausted during the review | Analysis fails | Model and key fallback; rule-based fallback, clearly labelled; sample data analyzed in advance |
+| The AI tags a lead wrongly | Trust lost | Rules decide the tag from extracted signals; every tag stores the rule that fired; an evaluation run over the sample chats compares expected and actual tags |
+| AI quota exhausted during peak usage | Analysis fails | Model and key fallback; rule-based fallback, clearly labelled; sample data analyzed in advance |
 | The public demo is spammed | AI cost, messy data | Per-visitor rate limits; no delete feature; fictional data only |
-| A cold start looks like an outage | "It works" fails | An explicit waking-up message; an optional keep-warm ping during the review window |
-| Sample data looks stale on review day | Empty "today" queue | Demo date re-base command run just before submission |
+| A cold start looks like an outage | User confusion | An explicit waking-up message; an optional keep-warm ping |
+| Sample data looks stale | Empty "today" queue | Demo date re-base command keeps queue current |
 
 ## 12. Deliverables
 
-| # | Deliverable | Owner |
+| # | Deliverable | Description |
 |---|---|---|
-| 1 | Live link (Vercel + Render + Supabase) | Built and documented by Claude; **deployed by the user** using `docs/deployment.md` |
-| 2 | GitHub repository | Code prepared locally by Claude; **committed and pushed by the user** |
-| 3 | Video, 3 minutes or less | Script by Claude (`docs/demo-script.md`); **recorded by the user** |
-| 4 | Half-page note | `docs/technical-note.md` by Claude |
+| 1 | Live link (Vercel + Render + Supabase) | Deployed per `docs/deployment.md` |
+| 2 | GitHub repository | Version controlled codebase |
+| 3 | Video walkthrough | Product demonstration |
+| 4 | Architecture note | `docs/technical-note.md` |
 
 ## 13. Traceability
 
-| Assignment line | Requirement |
+| Specification | Requirement |
 |---|---|
 | ≥ 20 fake leads (name, company, phone, source, last contact) | FR-01 |
 | ≥ 10 WhatsApp-style chats | FR-02 |

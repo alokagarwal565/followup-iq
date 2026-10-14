@@ -1,6 +1,6 @@
 # CLAUDE.md: FollowUpIQ
 
-Lead follow-up agent + web app for a B2B packaging-equipment sales team (Gushwork FDE take-home).
+Lead follow-up agent + web app for a B2B packaging-equipment sales team.
 Authoritative docs: [docs/BRD.md](docs/BRD.md) (what and why) and [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) (how, task cards, tracker). Read the plan's tracker before starting work.
 
 ## Hard rules

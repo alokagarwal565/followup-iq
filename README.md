@@ -4,7 +4,7 @@
 
 A lead follow-up agent with a one-screen web app for a small B2B packaging-equipment company (5 sales reps). It reads each lead and its WhatsApp chat, tags the lead **Hot / Warm / Cold** with a one-line reason, sets the **next follow-up date**, and **drafts the next message**. The screen puts today's follow-ups first, makes overdue ones impossible to miss, and lets a rep edit the draft, mark it as sent, and log new chats or leads. The agent then updates itself.
 
-Built for the Gushwork Forward Deployed Engineer take-home. The requirements, as understood, are in the [BRD](docs/BRD.md).
+Product requirements and architecture are detailed in the [BRD](docs/BRD.md).
 
 | Deliverable | Where |
 |---|---|
@@ -13,7 +13,7 @@ Built for the Gushwork Forward Deployed Engineer take-home. The requirements, as
 | Video | [https://www.loom.com/share/bbb4e38a8f4249e486b91144e5b1af7f](https://www.loom.com/share/bbb4e38a8f4249e486b91144e5b1af7f) |
 | Short note | [docs/technical-note.md](docs/technical-note.md) |
 
-> **Demo only:** all data is fictional. There is no login, by design of the assignment, so please don't enter real customer information.
+> **Demo only:** all data is fictional. This public demo does not require login, so please don't enter real customer information.
 
 ---
 
@@ -35,7 +35,7 @@ Built for the Gushwork Forward Deployed Engineer take-home. The requirements, as
   - Invented prices, discounts or delivery promises in drafts are rejected and re-asked.
   - If Gemini is down, the last good analysis stays visible. Never-analysed leads get a clearly labelled **rule-based** result with a Retry.
 
-Out of scope, per the assignment: login, real WhatsApp sending, payments.
+Out of scope for this demo: user authentication, real WhatsApp sending, payments.
 
 ## How the agent decides
 
